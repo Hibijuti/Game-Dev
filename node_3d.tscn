@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://bik2t16160r53"]
+
+[ext_resource type="Script" uid="uid://clckitu43a8d2" path="res://label_3d.gd" id="1_a202f"]
+
+[node name="Node3D" type="Node3D" unique_id=1156018814]
+
+[node name="Label3D" type="Label3D" parent="." unique_id=1664407069]
+transform = Transform3D(1, 0, 0, 0, 0.7031961, 0.71099585, 0, -0.71099585, 0.7031961, 0.20765746, 3.0414805, 0.64091563)
+text = "Hello World"
+script = ExtResource("1_a202f")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1713115875]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5458493, 2.9768171, 4.0771813)
