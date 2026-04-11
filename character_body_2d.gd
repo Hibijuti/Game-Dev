@@ -10,7 +10,12 @@ var health_bar
 var score = 0
 var score_label
 
+@export var player_id = 1
+
 func _ready():
+	# Set multiplayer authority
+	set_multiplayer_authority(player_id)
+	
 	# Create health bar
 	health_bar = ProgressBar.new()
 	health_bar.max_value = 100
@@ -63,28 +68,37 @@ func add_score(amount):
 	if score_label != null:
 		score_label.text = "Score: " + str(score)
 
+@rpc("any_peer", "unreliable")
+func sync_position(pos):
+	if not is_multiplayer_authority():
+		global_position = pos
+
 func _physics_process(delta: float) -> void:
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 
-	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
-		velocity.y = JUMP_VELOCITY
-		add_score(1)
+	if is_multiplayer_authority():
+		if Input.is_action_just_pressed("ui_accept") and is_on_floor():
+			velocity.y = JUMP_VELOCITY
+			add_score(1)
 
-	var direction := Input.get_axis("ui_left", "ui_right")
-	if direction:
-		velocity.x = direction * SPEED
-	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
+		var direction := Input.get_axis("ui_left", "ui_right")
+		if direction:
+			velocity.x = direction * SPEED
+		else:
+			velocity.x = move_toward(velocity.x, 0, SPEED)
 
-	if direction > 0:
-		animated_sprite.play("lebron right")
-		animated_sprite.flip_h = false
-	elif direction < 0:
-		animated_sprite.play("lebron left")
-		animated_sprite.flip_h = false
+		if direction > 0:
+			animated_sprite.play("lebron right")
+			animated_sprite.flip_h = false
+		elif direction < 0:
+			animated_sprite.play("lebron left")
+			animated_sprite.flip_h = false
 
-	move_and_slide()
+		move_and_slide()
+
+		# Sync position to other player
+		sync_position.rpc(global_position)
 
 func take_damage(amount):
 	hp -= amount

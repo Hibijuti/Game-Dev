@@ -295,4 +295,4 @@ position = Vector2(913, 405.99997)
 scale = Vector2(1.1952662, 1.2675803)
 sprite_frames = SubResource("SpriteFrames_vp6fl")
 animation = &"left"
-frame_progress = 0.30871487
+frame_progress = 0.9465889
